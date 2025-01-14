@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Dashboard</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="module" src="/main.js"></script>
+</head>
+<body x-data="{ 
+    darkMode: localStorage.getItem('darkMode') === 'true',
+    rtl: false,
+    currentLang: 'en',
+    sidebarOpen: window.innerWidth >= 1024,
+    init() {
+        if (this.darkMode) {
+            document.documentElement.classList.add('dark')
+        }
+        window.addEventListener('resize', () => {
+            this.sidebarOpen = window.innerWidth >= 1024
+        })
+    },
+    toggleDarkMode() {
+        this.darkMode = !this.darkMode
+        localStorage.setItem('darkMode', this.darkMode)
+        document.documentElement.classList.toggle('dark')
+    },
+    toggleLanguage() {
+        this.rtl = !this.rtl
+        this.currentLang = this.rtl ? 'ar' : 'en'
+        document.dir = this.rtl ? 'rtl' : 'ltr'
+    }
+}" 
+:dir="rtl ? 'rtl' : 'ltr'"
+class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div class="min-h-screen">
+        <!-- Mobile Menu Button -->
+        <button @click="sidebarOpen = !sidebarOpen" 
+                class="fixed z-50 bottom-4 right-4 lg:hidden bg-blue-500 text-white p-3 rounded-full shadow-lg">
+            <span class="material-icons">menu</span>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="fixed top-0 ltr:left-0 rtl:right-0 w-64 h-full bg-white dark:bg-gray-800 shadow-lg transition-transform duration-300 transform z-40"
+               :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full rtl:translate-x-full': !sidebarOpen }">
+            <div class="p-4">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
+                        <span class="material-icons align-middle">analytics</span>
+                        <span x-text="currentLang === 'en' ? 'Dashboard' : 'لوحة المعلومات'"></span>
+                    </h1>
+                </div>
+                <nav class="mt-8 space-y-2">
+                    <a href="#" class="flex items-center p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        <span class="material-icons">dashboard</span>
+                        <span class="ltr:ml-3 rtl:mr-3" x-text="currentLang === 'en' ? 'Overview' : 'نظرة عامة'"></span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        <span class="material-icons">trending_up</span>
+                        <span class="ltr:ml-3 rtl:mr-3" x-text="currentLang === 'en' ? 'Analytics' : 'التحليلات'"></span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        <span class="material-icons">people</span>
+                        <span class="ltr:ml-3 rtl:mr-3" x-text="currentLang === 'en' ? 'Customers' : 'العملاء'"></span>
+                    </a>
+                    <a href="#" class="flex items-center p-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        <span class="material-icons">inventory</span>
+                        <span class="ltr:ml-3 rtl:mr-3" x-text="currentLang === 'en' ? 'Products' : 'المنتجات'"></span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="lg:ltr:ml-64 lg:rtl:mr-64 p-4 lg:p-8 transition-all duration-300">
+            <!-- Header -->
+            <header class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white" x-text="currentLang === 'en' ? 'Overview' : 'نظرة عامة'"></h2>
+                <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                    <!-- Language Toggle -->
+                    <button @click="toggleLanguage()" 
+                            class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                        <span class="material-icons">translate</span>
+                    </button>
+                    <!-- Theme Toggle -->
+                    <button @click="toggleDarkMode()" 
+                            class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                        <span x-show="!darkMode" class="material-icons">dark_mode</span>
+                        <span x-show="darkMode" class="material-icons">light_mode</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
+                <div class="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg lg:text-xl font-semibold text-gray-800 dark:text-white" x-text="currentLang === 'en' ? 'Total Sales' : 'إجمالي المبيعات'"></h3>
+                        <span class="material-icons text-blue-500">payments</span>
+                    </div>
+                    <p class="text-2xl lg:text-3xl font-bold text-blue-600 dark:text-blue-400">$124,563</p>
+                    <p class="text-green-500 text-sm mt-2">
+                        <span class="material-icons text-sm align-middle">arrow_upward</span>
+                        <span>12.5%</span>
+                    </p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg lg:text-xl font-semibold text-gray-800 dark:text-white" x-text="currentLang === 'en' ? 'Active Users' : 'المستخدمين النشطين'"></h3>
+                        <span class="material-icons text-green-500">group</span>
+                    </div>
+                    <p class="text-2xl lg:text-3xl font-bold text-green-600 dark:text-green-400">8,549</p>
+                    <p class="text-green-500 text-sm mt-2">
+                        <span class="material-icons text-sm align-middle">arrow_upward</span>
+                        <span>8.2%</span>
+                    </p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg lg:text-xl font-semibold text-gray-800 dark:text-white" x-text="currentLang === 'en' ? 'Orders' : 'الطلبات'"></h3>
+                        <span class="material-icons text-purple-500">shopping_cart</span>
+                    </div>
+                    <p class="text-2xl lg:text-3xl font-bold text-purple-600 dark:text-purple-400">1,245</p>
+                    <p class="text-red-500 text-sm mt-2">
+                        <span class="material-icons text-sm align-middle">arrow_downward</span>
+                        <span>3.1%</span>
+                    </p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg lg:text-xl font-semibold text-gray-800 dark:text-white" x-text="currentLang === 'en' ? 'Revenue' : 'الإيرادات'"></h3>
+                        <span class="material-icons text-yellow-500">attach_money</span>
+                    </div>
+                    <p class="text-2xl lg:text-3xl font-bold text-yellow-600 dark:text-yellow-400">$45,678</p>
+                    <p class="text-green-500 text-sm mt-2">
+                        <span class="material-icons text-sm align-middle">arrow_upward</span>
+                        <span>15.3%</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+                <div class="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4" x-text="currentLang === 'en' ? 'Recent Activity' : 'النشاط الأخير'"></h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <span class="material-icons text-blue-500 ltr:mr-3 rtl:ml-3">notification_important</span>
+                            <p class="text-gray-600 dark:text-gray-300" x-text="currentLang === 'en' ? 'New order received (#2891)' : 'تم استلام طلب جديد (#2891)'"></p>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="material-icons text-green-500 ltr:mr-3 rtl:ml-3">person_add</span>
+                            <p class="text-gray-600 dark:text-gray-300" x-text="currentLang === 'en' ? 'New customer registered' : 'تم تسجيل عميل جديد'"></p>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="material-icons text-yellow-500 ltr:mr-3 rtl:ml-3">warning</span>
+                            <p class="text-gray-600 dark:text-gray-300" x-text="currentLang === 'en' ? 'System update required' : 'مطلوب تحديث النظام'"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4" x-text="currentLang === 'en' ? 'Quick Actions' : 'إجراءات سريعة'"></h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="p-4 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors">
+                            <span class="material-icons mb-2">add_shopping_cart</span>
+                            <span x-text="currentLang === 'en' ? 'New Order' : 'طلب جديد'"></span>
+                        </button>
+                        <button class="p-4 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-lg hover:bg-green-200 dark:hover:bg-green-800 transition-colors">
+                            <span class="material-icons mb-2">person_add</span>
+                            <span x-text="currentLang === 'en' ? 'Add User' : 'إضافة مستخدم'"></span>
+                        </button>
+                        <button class="p-4 bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors">
+                            <span class="material-icons mb-2">inventory</span>
+                            <span x-text="currentLang === 'en' ? 'Inventory' : 'المخزون'"></span>
+                        </button>
+                        <button class="p-4 bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 rounded-lg hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-colors">
+                            <span class="material-icons mb-2">settings</span>
+                            <span x-text="currentLang === 'en' ? 'Settings' : 'الإعدادات'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
